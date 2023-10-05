@@ -15,7 +15,7 @@ router = APIRouter(tags=['file'])
 
 @router.get("/top")
 async def top_file(
-    repo: Annotated[Any, Depends(get_db_cursor(FileRepository, row_factory=class_row(dict)))]
+    repo: Annotated[FileRepository, Depends(get_db_cursor(FileRepository, row_factory=class_row(dict)))]
 ) -> list[FileInfoResponseSchema]:
     return await repo.top()
 
@@ -32,7 +32,7 @@ async def upload_file(
 @router.get("/files/{id}")
 async def download_file(
     pk: Annotated[int, Path(..., alias='id')],
-    repo: Annotated[Any, Depends(get_db_cursor(FileRepository))]
+    repo: Annotated[FileRepository, Depends(get_db_cursor(FileRepository))]
 ):
     content, filename = await repo.get_content(pk)
     return Response(
